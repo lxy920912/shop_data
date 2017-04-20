@@ -14,20 +14,18 @@ export default class extends Base {
         return this.display();
     }
     async getDuoshouAction(self) {
-        axios.get("http://media4fl.oss-cn-hangzhou.aliyuncs.com/real/sogou_xml/SiteMap.xml")
+        await axios.get("http://media4fl.oss-cn-hangzhou.aliyuncs.com/real/sogou_xml/SiteMap.xml")
             .then(function(res) {
-                xml2json.xmlDataToJSON(res.data).then(function(json) {
-                    self.success(json.sitemapindex.sitemap);
-                }, function(err) {
-                    console.log("cannote convert xml to json correct................");
-                    console.log(err);
-                })
-            }).then(function(json) {
-                console.log(json);
+                return xml2json.xmlDataToJSON(res.data);
+            }).then(function(data) {
+                let list = data.sitemapindex.sitemap;
+                for (let i = 0; i < list.length; i++) {
+                    console.log(list[i].loc)
+                }
             }).catch(function() {}, function(err) {
                 console.log("cannot get data from DuoshouBang...................");
                 console.log(err);
             })
-            // return self.success("hello");
+        return self.success("hello");
     }
 }
